@@ -32,7 +32,7 @@ class LinkedList
   end
 
   def pop
-    list.pop
+    tail.next_node = nil
   end
 
   def contains?(value)
@@ -47,11 +47,21 @@ class LinkedList
     nil
   end
 
-  def to_s
-    string = ""
-    list.each { |node| string += "( #{node.value} ) -> " }
+  def to_s(node = head)
+    return "nil" if node == nil
+    print "( #{node.value} ) -> "
+    to_s(node.next_node)
+  end
 
-    string += "nil"
+  def insert_at(value, index)
+    append(value)
+    list[-2].next_node = nil
+    tail.next_node = list[index].next_node
+    list[index].next_node = tail
+  end
+
+  def remove_at(index)
+    list[index - 1].next_node = list[index].next_node
   end
 end
 
@@ -71,5 +81,9 @@ list_linked.prepend(1)
 list_linked.append(3)
 
 puts list_linked
-p list_linked.head
-p list_linked.head.next_node
+list_linked.insert_at(9, 1)
+puts list_linked
+list_linked.remove_at(1)
+puts list_linked
+list_linked.pop
+puts list_linked
